@@ -267,7 +267,7 @@ class MusicVisualApp {
                         boardItem.className = 'board-item';
                         boardItem.innerHTML = `
                             <strong>${sanitizeHTML(board.name)}</strong>
-                            <small>${board.id}</small>
+                            <small>${sanitizeHTML(board.id)}</small>
                         `;
                         boardItem.addEventListener('click', () => {
                             boardIdInput.value = board.id;

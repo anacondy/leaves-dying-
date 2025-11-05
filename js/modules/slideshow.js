@@ -42,7 +42,14 @@ class BackgroundSlideshow {
         this.images.forEach((imageSrc, index) => {
             const slideDiv = document.createElement('div');
             slideDiv.className = 'slideshow-image';
-            slideDiv.style.backgroundImage = `url('${imageSrc}')`;
+            // Sanitize URL to prevent CSS injection - escape all special characters
+            const sanitizedUrl = imageSrc
+                .replace(/\\/g, '\\\\')
+                .replace(/'/g, "\\'")
+                .replace(/"/g, '\\"')
+                .replace(/\n/g, '\\n')
+                .replace(/\r/g, '\\r');
+            slideDiv.style.backgroundImage = `url('${sanitizedUrl}')`;
             
             if (index === 0) {
                 slideDiv.classList.add('active');

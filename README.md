@@ -1,6 +1,23 @@
 # 🎵 Music & Visual Experience Website
 
+🌐 **Live Demo:** [https://anacondy.github.io/leaves-dying-/](https://anacondy.github.io/leaves-dying-/)
+
+👥 **Authors:** Puppy Pilot & anacondy | *Inspired by the movie Munich (Eric Bana)*
+
+---
+
 A modern, interactive web application that combines YouTube music streaming, image slideshows, and animation. Perfect for creating immersive audio-visual experiences.
+
+## 📸 Screenshots
+
+### Main Interface - YouTube Music Tab
+![Homepage Screenshot](https://github.com/user-attachments/assets/2fb0af56-9cdf-48d4-82b4-4ce54bbcb60a)
+
+### Pinterest Integration Tab
+![Pinterest Tab Screenshot](https://github.com/user-attachments/assets/0f5bdf85-381e-4617-864c-ce9fd94df6ae)
+
+### Local Upload Tab
+![Upload Tab Screenshot](https://github.com/user-attachments/assets/6a1c017d-b756-47d9-b646-3c663ba0a57d)
 
 ## Features
 
