@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="Settings - Music & Visual Experience">
+    <title>Settings - Music & Visual Experience</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <style>
+        .settings-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 32px;
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+        
+        .settings-header h1 {
+            font-size: 32px;
+            color: rgba(255, 255, 255, 0.95);
+        }
+        
+        .back-btn {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: rgba(255, 255, 255, 0.9);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.18);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .settings-section {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .settings-section h2 {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 20px;
+        }
+        
+        .setting-item {
+            margin-bottom: 20px;
+        }
+        
+        .setting-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .setting-label {
+            display: block;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .setting-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: rgba(255, 255, 255, 0.9);
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .setting-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+        }
+        
+        .setting-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .setting-description {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 6px;
+        }
+        
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .slider-container input[type="range"] {
+            flex: 1;
+        }
+        
+        .slider-value {
+            min-width: 50px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 600;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Slideshow Container -->
+    <div id="background-slideshow" class="slideshow-container"></div>
+    
+    <div class="settings-container">
+        <div class="settings-header">
+            <h1>⚙️ Settings</h1>
+            <a href="index.html" class="back-btn">← Back to Home</a>
+        </div>
+        
+        <!-- YouTube Settings -->
+        <div class="settings-section">
+            <h2>🎵 YouTube Music</h2>
+            <div class="setting-item">
+                <label class="setting-label">Default Playlist ID</label>
+                <input type="text" id="playlist-input" class="setting-input" placeholder="Enter YouTube Playlist ID" value="">
+                <p class="setting-description">YouTube playlist ID to load on startup</p>
+            </div>
+            <div class="setting-item">
+                <button id="load-playlist-btn" class="btn btn-primary" style="width: 100%;">Load Playlist</button>
+            </div>
+            <div id="playlist-list" class="playlist-list"></div>
+        </div>
+        
+        <!-- Pinterest Settings -->
+        <div class="settings-section">
+            <h2>📌 Pinterest Integration</h2>
+            <div class="setting-item">
+                <label class="setting-label">Pinterest Access Token</label>
+                <input type="text" id="pinterest-token" class="setting-input" placeholder="Enter Pinterest Access Token" value="">
+                <p class="setting-description">Your Pinterest API access token</p>
+            </div>
+            <div class="setting-item">
+                <label class="setting-label">Board ID</label>
+                <input type="text" id="board-input" class="setting-input" placeholder="Enter Board ID" value="">
+                <p class="setting-description">Pinterest board ID to fetch images from</p>
+            </div>
+            <div class="setting-item">
+                <button id="search-boards-btn" class="btn btn-secondary" style="width: 100%; margin-bottom: 10px;">My Boards</button>
+                <button id="load-pinterest-btn" class="btn btn-primary" style="width: 100%;">Load Images</button>
+            </div>
+            <div id="boards-list" class="boards-list"></div>
+        </div>
+        
+        <!-- Image Upload Settings -->
+        <div class="settings-section">
+            <h2>🖼️ Local Image Upload</h2>
+            <div class="setting-item">
+                <div class="upload-area" id="upload-area">
+                    <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    <p class="upload-text">Drag & drop images here or click to select</p>
+                    <input type="file" id="file-input" accept="image/*" multiple style="display: none;">
+                </div>
+                <div id="upload-status" class="upload-status"></div>
+                <div id="upload-preview" class="upload-preview"></div>
+            </div>
+        </div>
+        
+        <!-- Display Settings -->
+        <div class="settings-section">
+            <h2>🎨 Display Settings</h2>
+            <div class="setting-item">
+                <label class="setting-label">Volume</label>
+                <div class="slider-container">
+                    <input type="range" id="volume-slider" class="control-slider" min="0" max="100" value="70">
+                    <span class="slider-value" id="volume-value">70%</span>
+                </div>
+            </div>
+            <div class="setting-item">
+                <label class="setting-label">Slideshow Speed</label>
+                <div class="slider-container">
+                    <input type="range" id="interval-slider" class="control-slider" min="3" max="20" value="8">
+                    <span class="slider-value" id="interval-value">8s</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Status Messages -->
+        <div id="status-message" class="status-message"></div>
+    </div>
+    
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+    
+    <!-- Hidden YouTube Player -->
+    <div id="youtube-player-container" style="display: none;">
+        <div id="youtube-player"></div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="js/utils/constants.js"></script>
+    <script src="js/utils/helpers.js"></script>
+    <script src="js/modules/audioPlayer.js"></script>
+    <script src="js/modules/slideshow.js"></script>
+    <script src="js/modules/fileUploader.js"></script>
+    <script src="js/modules/pinterestAPI.js"></script>
+    <script src="js/modules/notificationSystem.js"></script>
+    <script>
+        // Initialize slideshow for background
+        let slideshow = null;
+        let notifications = null;
+        let uploader = null;
+        let pinterest = null;
+        let player = null;
+        
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Initialize notification system
+            notifications = new NotificationSystem();
+            notifications.init();
+            
+            // Initialize slideshow
+            slideshow = new BackgroundSlideshow(CONFIG.DEFAULT_IMAGES, CONFIG.SLIDESHOW.DEFAULT_INTERVAL);
+            slideshow.init('background-slideshow');
+            await slideshow.preload();
+            slideshow.start();
+            
+            // Initialize player
+            player = new AudioPlayer();
+            player.init('youtube-player');
+            
+            // Initialize uploader
+            uploader = new LocalImageUploader((images) => {
+                slideshow.updateImages(images, true);
+                notifications.success(`✅ Loaded ${images.length} images!`);
+            });
+            uploader.init();
+            
+            // Initialize Pinterest API
+            pinterest = new PinterestAPI('');
+            
+            // Setup event handlers
+            setupEventHandlers();
+            
+            notifications.success('Settings loaded successfully!');
+        });
+        
+        function setupEventHandlers() {
+            // Volume slider
+            const volumeSlider = document.getElementById('volume-slider');
+            const volumeValue = document.getElementById('volume-value');
+            if (volumeSlider && volumeValue) {
+                volumeSlider.addEventListener('input', (e) => {
+                    const value = e.target.value;
+                    volumeValue.textContent = value + '%';
+                    if (player) player.setVolume(parseInt(value));
+                });
+            }
+            
+            // Interval slider
+            const intervalSlider = document.getElementById('interval-slider');
+            const intervalValue = document.getElementById('interval-value');
+            if (intervalSlider && intervalValue) {
+                intervalSlider.addEventListener('input', (e) => {
+                    const value = e.target.value;
+                    intervalValue.textContent = value + 's';
+                    if (slideshow) slideshow.setInterval(parseInt(value) * 1000);
+                });
+            }
+            
+            // YouTube playlist
+            const loadPlaylistBtn = document.getElementById('load-playlist-btn');
+            const playlistInput = document.getElementById('playlist-input');
+            if (loadPlaylistBtn && playlistInput) {
+                playlistInput.value = CONFIG.YOUTUBE.DEFAULT_PLAYLIST;
+                loadPlaylistBtn.addEventListener('click', () => {
+                    const playlistId = playlistInput.value.trim();
+                    if (!playlistId) {
+                        notifications.warning('Please enter a playlist ID');
+                        return;
+                    }
+                    if (player) {
+                        player.loadPlaylist(playlistId);
+                        notifications.success('✅ Playlist loaded!');
+                    }
+                });
+            }
+            
+            // Pinterest
+            const loadPinterestBtn = document.getElementById('load-pinterest-btn');
+            const pinterestTokenInput = document.getElementById('pinterest-token');
+            const boardIdInput = document.getElementById('board-input');
+            const searchBoardsBtn = document.getElementById('search-boards-btn');
+            
+            if (loadPinterestBtn) {
+                loadPinterestBtn.addEventListener('click', async () => {
+                    const token = pinterestTokenInput.value.trim();
+                    const boardId = boardIdInput.value.trim();
+                    
+                    if (!token || !boardId) {
+                        notifications.warning('Please enter token and board ID');
+                        return;
+                    }
+                    
+                    try {
+                        pinterest.setToken(token);
+                        const pins = await pinterest.getBoardPins(boardId);
+                        const imageUrls = pins.map(pin => pin.imageUrl).filter(url => url);
+                        slideshow.updateImages(imageUrls, true);
+                        notifications.success(`✅ Loaded ${imageUrls.length} images from Pinterest!`);
+                    } catch (error) {
+                        notifications.error(`Pinterest error: ${error.message}`);
+                    }
+                });
+            }
+            
+            if (searchBoardsBtn) {
+                searchBoardsBtn.addEventListener('click', async () => {
+                    const token = pinterestTokenInput.value.trim();
+                    if (!token) {
+                        notifications.warning('Please enter Pinterest access token first');
+                        return;
+                    }
+                    
+                    try {
+                        pinterest.setToken(token);
+                        const boards = await pinterest.getUserBoards();
+                        const boardsList = document.getElementById('boards-list');
+                        
+                        if (!boardsList) return;
+                        boardsList.innerHTML = '';
+                        
+                        if (boards.length === 0) {
+                            boardsList.innerHTML = '<p class="help-text">No boards found</p>';
+                            return;
+                        }
+                        
+                        boards.forEach(board => {
+                            const boardItem = document.createElement('div');
+                            boardItem.className = 'board-item';
+                            boardItem.innerHTML = `<strong>${board.name}</strong><br><small>${board.id}</small>`;
+                            boardItem.addEventListener('click', () => {
+                                boardIdInput.value = board.id;
+                                notifications.success(`✅ Selected board: ${board.name}`);
+                            });
+                            boardsList.appendChild(boardItem);
+                        });
+                        
+                        notifications.success(`✅ Found ${boards.length} boards!`);
+                    } catch (error) {
+                        notifications.error(`Error fetching boards: ${error.message}`);
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>

@@ -9,6 +9,7 @@ class VerticalTextScroller {
         this.container = null;
         this.isScrolling = false;
         this.scrollDuration = 8000; // default
+        this.currentIndex = 0;
         this.callbacks = {
             onItemChange: null
         };
@@ -25,8 +26,34 @@ class VerticalTextScroller {
             return false;
         }
 
-        this.updateScrollDuration();
+        this.renderItems();
+        this.highlightCurrentItem();
         return true;
+    }
+
+    /**
+     * Render text items
+     */
+    renderItems() {
+        if (!this.container) return;
+        
+        // Clear existing items
+        this.container.innerHTML = '';
+        
+        // Create item elements
+        this.items.forEach((item, index) => {
+            const itemElement = document.createElement('div');
+            itemElement.className = 'text-item';
+            itemElement.textContent = item;
+            itemElement.dataset.index = index;
+            
+            // Make items clickable
+            itemElement.addEventListener('click', () => {
+                this.scrollToIndex(index);
+            });
+            
+            this.container.appendChild(itemElement);
+        });
     }
 
     /**
@@ -41,6 +68,69 @@ class VerticalTextScroller {
     }
 
     /**
+     * Scroll up to previous item
+     */
+    scrollUp() {
+        this.currentIndex = (this.currentIndex - 1 + this.items.length) % this.items.length;
+        this.updateView();
+    }
+
+    /**
+     * Scroll down to next item
+     */
+    scrollDown() {
+        this.currentIndex = (this.currentIndex + 1) % this.items.length;
+        this.updateView();
+    }
+
+    /**
+     * Scroll to specific index
+     * @param {number} index - Target index
+     */
+    scrollToIndex(index) {
+        if (index >= 0 && index < this.items.length) {
+            this.currentIndex = index;
+            this.updateView();
+        }
+    }
+
+    /**
+     * Update view after scroll
+     */
+    updateView() {
+        this.highlightCurrentItem();
+        
+        // Sync with slideshow
+        if (this.slideshow) {
+            this.slideshow.goToSlide(this.currentIndex);
+        }
+        
+        // Trigger callback
+        if (this.callbacks.onItemChange) {
+            this.callbacks.onItemChange({
+                index: this.currentIndex,
+                item: this.items[this.currentIndex]
+            });
+        }
+    }
+
+    /**
+     * Highlight current item
+     */
+    highlightCurrentItem() {
+        if (!this.container) return;
+        
+        const items = this.container.querySelectorAll('.text-item');
+        items.forEach((item, index) => {
+            if (index === this.currentIndex) {
+                item.classList.add('active');
+            } else {
+                item.classList.remove('active');
+            }
+        });
+    }
+
+    /**
      * Update scroll duration based on slideshow
      */
     updateScrollDuration() {
@@ -48,7 +138,6 @@ class VerticalTextScroller {
 
         const duration = (this.items.length * this.slideshow.interval) / 1000;
         this.scrollDuration = duration;
-        this.container.style.animationDuration = `${duration}s`;
     }
 
     /**
@@ -62,20 +151,14 @@ class VerticalTextScroller {
      * Pause scroll
      */
     pause() {
-        if (this.container) {
-            this.container.style.animationPlayState = 'paused';
-            this.isScrolling = false;
-        }
+        this.isScrolling = false;
     }
 
     /**
      * Resume scroll
      */
     resume() {
-        if (this.container) {
-            this.container.style.animationPlayState = 'running';
-            this.isScrolling = true;
-        }
+        this.isScrolling = true;
     }
 
     /**
@@ -85,6 +168,7 @@ class VerticalTextScroller {
     updateItems(items) {
         if (Array.isArray(items) && items.length > 0) {
             this.items = items;
+            this.renderItems();
             this.updateScrollDuration();
         }
     }
@@ -94,10 +178,17 @@ class VerticalTextScroller {
      * @returns {string} - Current item
      */
     getCurrentItem() {
-        if (this.slideshow) {
-            const index = this.slideshow.currentIndex % this.items.length;
-            return this.items[index];
+        return this.items[this.currentIndex];
+    }
+
+    /**
+     * Set current index (for external sync)
+     * @param {number} index - Index to set
+     */
+    setCurrentIndex(index) {
+        if (index >= 0 && index < this.items.length) {
+            this.currentIndex = index;
+            this.highlightCurrentItem();
         }
-        return this.items[0];
     }
 }

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Music & Visual Experience</title>
+    <link rel="stylesheet" href="inputlogin.style.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(110deg, #1a1a1c, #2c2c2e);
+            color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        
+        /* Background slideshow for login */
+        .login-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.3;
+        }
+        
+        .login-background img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            animation: fadeSlideshow 16s infinite;
+        }
+        
+        .login-background img:nth-child(1) { animation-delay: 0s; }
+        .login-background img:nth-child(2) { animation-delay: 4s; }
+        .login-background img:nth-child(3) { animation-delay: 8s; }
+        .login-background img:nth-child(4) { animation-delay: 12s; }
+        
+        @keyframes fadeSlideshow {
+            0% { opacity: 0; }
+            6.25% { opacity: 1; }
+            25% { opacity: 1; }
+            31.25% { opacity: 0; }
+            100% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background slideshow -->
+    <div class="login-background">
+        <img src="5dd84a18932fb39a83c4c045dd78268d.jpg" alt="">
+        <img src="7578c6938688c6b3d2d236650c0ac0e8.jpg" alt="">
+        <img src="c7cbc9a20c27ec04bb0427e10901a7d2.jpg" alt="">
+        <img src="e26844ce7a4f9626f64224ef83efdd51.jpg" alt="">
+    </div>
+
+    <div class="verification-card">
+        <div class="peel"></div>
+
+        <button class="close-btn" onclick="window.location.href='index.html'">&times;</button>
+
+        <div class="icon-container">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C9.79086 2 8 3.79086 8 6V8H7C5.89543 8 5 8.89543 5 10V18C5 19.1046 5.89543 20 7 20H17C18.1046 20 19 19.1046 19 18V10C19 8.89543 18.1046 8 17 8H16V6C16 3.79086 14.2091 2 12 2ZM12 4C13.1046 4 14 4.89543 14 6V8H10V6C10 4.89543 10.8954 4 12 4Z" fill="#888"/>
+            </svg>
+        </div>
+
+        <h2>Enter Settings Passkey</h2>
+        <p class="subtitle">Enter your 4-digit passkey to access settings</p>
+
+        <div class="otp-inputs">
+            <input type="text" class="otp-input" maxlength="1" inputmode="numeric">
+            <input type="text" class="otp-input" maxlength="1" inputmode="numeric">
+            <input type="text" class="otp-input" maxlength="1" inputmode="numeric">
+            <input type="text" class="otp-input" maxlength="1" inputmode="numeric">
+        </div>
+
+        <button class="verify-btn" disabled>Access Settings</button>
+
+        <p class="resend-text">
+            Forgot your passkey? <a href="index.html">Go back to home</a>
+        </p>
+    </div>
+
+    <script>
+        // Get all the DOM elements we need
+        const otpInputs = document.querySelectorAll('.otp-input');
+        const verifyBtn = document.querySelector('.verify-btn');
+        const otpContainer = document.querySelector('.otp-inputs');
+
+        // Default passkey is 1234
+        const SETTINGS_PASSKEY = '1234';
+
+        /**
+         * Checks the state of all inputs and updates the UI
+         */
+        function checkAllInputs() {
+            let allFilled = true;
+            otpInputs.forEach(input => {
+                if (input.value.length === 0) {
+                    allFilled = false;
+                }
+            });
+
+            if (allFilled) {
+                verifyBtn.classList.add('ready');
+                verifyBtn.disabled = false;
+                otpContainer.classList.add('success');
+            } else {
+                verifyBtn.classList.remove('ready');
+                verifyBtn.disabled = true;
+                otpContainer.classList.remove('success');
+            }
+        }
+
+        /**
+         * Submits the passkey
+         */
+        function submitVerification() {
+            const code = [...otpInputs].map(input => input.value).join('');
+
+            if (code === SETTINGS_PASSKEY) {
+                // SUCCESS - Redirect to settings
+                window.location.href = 'settings.html';
+            } else {
+                // ERROR - Show animation and clear
+                triggerErrorAnimation();
+            }
+        }
+
+        /**
+         * Triggers the red "wipe" animation and clears inputs
+         */
+        function triggerErrorAnimation() {
+            otpInputs.forEach(input => {
+                input.classList.add('error');
+            });
+
+            setTimeout(() => {
+                otpInputs.forEach(input => {
+                    input.value = '';
+                    input.classList.remove('error');
+                });
+                
+                checkAllInputs();
+                otpInputs[0].focus();
+            }, 1000);
+        }
+
+        // Event Listeners
+        otpInputs.forEach((input, index) => {
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' || e.key === 'Delete') {
+                    e.preventDefault();
+                    if (input.value === '' && index > 0) {
+                        otpInputs[index - 1].focus();
+                        otpInputs[index - 1].value = '';
+                    } else {
+                        input.value = '';
+                    }
+                    checkAllInputs();
+                }
+                
+                if (e.key === 'ArrowLeft' && index > 0) {
+                    otpInputs[index - 1].focus();
+                }
+                if (e.key === 'ArrowRight' && index < otpInputs.length - 1) {
+                    otpInputs[index + 1].focus();
+                }
+
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (verifyBtn.classList.contains('ready')) {
+                        submitVerification();
+                    }
+                }
+            });
+
+            input.addEventListener('input', () => {
+                if (input.value.length === 1 && index < otpInputs.length - 1) {
+                    otpInputs[index + 1].focus();
+                }
+                checkAllInputs();
+            });
+        });
+
+        // Paste event
+        otpInputs[0].addEventListener('paste', (e) => {
+            const pasteData = (e.clipboardData || window.clipboardData).getData('text');
+            e.preventDefault();
+            
+            if (pasteData && pasteData.length === otpInputs.length) {
+                otpInputs.forEach((input, index) => {
+                    input.value = pasteData[index] || '';
+                });
+                
+                otpInputs[otpInputs.length - 1].focus();
+                checkAllInputs();
+            }
+        });
+
+        // Click event for the verify button
+        verifyBtn.addEventListener('click', () => {
+            if (!verifyBtn.disabled) {
+                submitVerification();
+            }
+        });
+
+        // On Page Load
+        window.addEventListener('load', () => {
+            otpInputs[0].focus();
+            checkAllInputs();
+        });
+    </script>
+</body>
+</html>

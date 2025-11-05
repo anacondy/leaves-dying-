@@ -185,6 +185,14 @@ class BackgroundSlideshow {
     }
 
     /**
+     * Alias for goTo method
+     * @param {number} index - Slide index
+     */
+    goToSlide(index) {
+        this.goTo(index);
+    }
+
+    /**
      * Set slideshow interval
      * @param {number} interval - Interval in milliseconds
      */
