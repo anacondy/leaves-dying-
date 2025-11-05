@@ -101,7 +101,7 @@ class VerticalTextScroller {
         this.highlightCurrentItem();
         
         // Sync with slideshow
-        if (this.slideshow) {
+        if (this.slideshow && typeof this.slideshow.goToSlide === 'function') {
             this.slideshow.goToSlide(this.currentIndex);
         }
         

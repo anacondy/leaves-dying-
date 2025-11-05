@@ -189,14 +189,17 @@ class MusicVisualApp {
         const editTextBtn = document.getElementById('edit-text-btn');
         
         if (textScroll && editTextBtn) {
+            let textItemsCache = null;
+            
             editTextBtn.addEventListener('click', () => {
                 const isEditing = textScroll.getAttribute('contenteditable') === 'true';
                 if (isEditing) {
                     textScroll.setAttribute('contenteditable', 'false');
                     editTextBtn.style.opacity = '0.7';
                     
-                    // Update text items
-                    const items = Array.from(textScroll.querySelectorAll('.text-item'))
+                    // Update text items using cached elements
+                    textItemsCache = textScroll.querySelectorAll('.text-item');
+                    const items = Array.from(textItemsCache)
                         .map(item => item.textContent.trim())
                         .filter(text => text.length > 0);
                     
@@ -206,6 +209,7 @@ class MusicVisualApp {
                         // Save to localStorage
                         localStorage.setItem('textItems', JSON.stringify(items));
                     }
+                    textItemsCache = null; // Clear cache after use
                 } else {
                     textScroll.setAttribute('contenteditable', 'true');
                     editTextBtn.style.opacity = '1';

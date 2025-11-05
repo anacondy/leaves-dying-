@@ -41,9 +41,8 @@ class KeyboardHandler {
         const key = e.key.toLowerCase();
         this.keysPressed.add(key);
 
-        // Check for F+S combination
-        if ((this.keysPressed.has('f') || this.keysPressed.has('F')) && 
-            (this.keysPressed.has('s') || this.keysPressed.has('S'))) {
+        // Check for F+S combination (use lowercase since we converted)
+        if (this.keysPressed.has('f') && this.keysPressed.has('s')) {
             if (!this.settingsTimer) {
                 this.startSettingsTimer();
             }
