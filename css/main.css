@@ -806,12 +806,12 @@ body {
     background-position: center;
     background-repeat: no-repeat;
     opacity: 0;
-    transition: opacity 2s var(--ease-standard);
+    transition: opacity 3s ease-in-out;
 }
 
 .slideshow-image.active {
     opacity: 1;
-    animation: subtle-zoom 20s var(--ease-standard) infinite alternate;
+    animation: subtle-zoom 25s ease-in-out infinite alternate;
 }
 
 @keyframes subtle-zoom {
@@ -837,8 +837,9 @@ body {
 }
 
 .app-container > * {
-    backdrop-filter: blur(10px);
-    background: rgba(var(--color-slate-900-rgb), 0.2);
+    backdrop-filter: blur(20px) saturate(180%);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 /* ============================================
@@ -851,8 +852,10 @@ body {
     align-items: center;
     justify-content: center;
     padding: var(--space-32) var(--space-20);
-    border-right: 1px solid var(--color-border);
+    border-right: 1px solid rgba(255, 255, 255, 0.18);
     position: relative;
+    backdrop-filter: blur(20px) saturate(180%);
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .vertical-text-container {
@@ -878,7 +881,7 @@ body {
 .text-item {
     font-size: var(--font-size-md);
     font-weight: var(--font-weight-normal);
-    color: var(--color-text-secondary);
+    color: rgba(255, 255, 255, 0.7);
     padding: var(--space-16) 0;
     display: block;
     text-transform: uppercase;
@@ -888,10 +891,11 @@ body {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .text-item:hover {
-    color: var(--color-text);
+    color: rgba(255, 255, 255, 0.95);
     transform: scaleX(1.05);
     cursor: pointer;
 }
@@ -919,6 +923,8 @@ body {
     padding: var(--space-32);
     position: relative;
     z-index: 5;
+    backdrop-filter: blur(20px) saturate(180%);
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .content-wrapper {
@@ -935,17 +941,18 @@ body {
 .app-title {
     font-size: 56px;
     font-weight: var(--font-weight-bold);
-    color: var(--color-surface);
+    color: rgba(255, 255, 255, 0.95);
     margin-bottom: var(--space-8);
-    text-shadow: 2px 2px 4px rgba(var(--color-slate-900-rgb), 0.3);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .app-subtitle {
     font-size: var(--font-size-lg);
-    color: var(--color-text-secondary);
+    color: rgba(255, 255, 255, 0.75);
     font-weight: var(--font-weight-normal);
     letter-spacing: 2px;
     text-transform: uppercase;
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
 }
 
 /* ============================================
@@ -961,21 +968,22 @@ body {
 }
 
 .now-playing, .image-info {
-    background: rgba(var(--color-slate-900-rgb), 0.08);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
     padding: var(--space-16);
     border-radius: var(--radius-base);
-    border: 1px solid var(--color-border);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     transition: all var(--transition);
 }
 
 .now-playing:hover, .image-info:hover {
-    background: rgba(var(--color-slate-900-rgb), 0.12);
-    border-color: var(--color-border);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
 }
 
 .label {
     display: block;
-    color: var(--color-text-secondary);
+    color: rgba(255, 255, 255, 0.65);
     margin-bottom: var(--space-6);
     text-transform: uppercase;
     font-weight: var(--font-weight-semibold);
@@ -984,7 +992,7 @@ body {
 }
 
 .track-title, .image-number {
-    color: var(--color-text);
+    color: rgba(255, 255, 255, 0.9);
     font-weight: var(--font-weight-medium);
     overflow: hidden;
     text-overflow: ellipsis;
@@ -999,14 +1007,14 @@ body {
     display: flex;
     gap: var(--space-10);
     margin-bottom: var(--space-24);
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .tab-btn {
     padding: var(--space-12) var(--space-20);
     background: none;
     border: none;
-    color: var(--color-text-secondary);
+    color: rgba(255, 255, 255, 0.65);
     cursor: pointer;
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-semibold);
@@ -1017,11 +1025,11 @@ body {
 }
 
 .tab-btn:hover {
-    color: var(--color-text);
+    color: rgba(255, 255, 255, 0.85);
 }
 
 .tab-btn.active {
-    color: var(--color-surface);
+    color: rgba(255, 255, 255, 0.95);
 }
 
 .tab-btn.active::after {
@@ -1031,7 +1039,7 @@ body {
     left: 0;
     right: 0;
     height: 2px;
-    background: var(--color-surface);
+    background: rgba(255, 255, 255, 0.9);
     animation: slideIn 0.3s ease-out;
 }
 
@@ -1080,7 +1088,7 @@ body {
     font-weight: var(--font-weight-semibold);
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: var(--color-surface);
+    color: rgba(255, 255, 255, 0.9);
     margin-bottom: var(--space-10);
 }
 
@@ -1097,10 +1105,11 @@ body {
 .input-group input {
     flex: 1;
     padding: var(--space-10) var(--space-12);
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: var(--radius-base);
-    color: var(--color-text);
+    color: rgba(255, 255, 255, 0.9);
     font-family: var(--font-family-base);
     font-size: var(--font-size-sm);
     transition: all var(--transition);
@@ -1108,13 +1117,13 @@ body {
 
 .input-group input:focus {
     outline: none;
-    background: var(--color-surface);
-    border-color: var(--color-primary);
-    box-shadow: var(--focus-ring);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
 }
 
 .input-group input::placeholder {
-    color: var(--color-text-secondary);
+    color: rgba(255, 255, 255, 0.5);
 }
 
 /* ============================================
@@ -1126,10 +1135,11 @@ body {
     align-items: center;
     justify-content: center;
     padding: var(--space-10) var(--space-16);
-    background: var(--color-secondary);
-    border: 1px solid var(--color-border);
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: var(--radius-base);
-    color: var(--color-text);
+    color: rgba(255, 255, 255, 0.9);
     cursor: pointer;
     font-family: var(--font-family-base);
     font-size: var(--font-size-sm);
@@ -1142,8 +1152,8 @@ body {
 }
 
 .btn:hover {
-    background: var(--color-secondary-hover);
-    border-color: var(--color-border);
+    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(255, 255, 255, 0.3);
     transform: translateY(-2px);
 }
 
@@ -1153,23 +1163,23 @@ body {
 
 .btn:focus-visible {
     outline: none;
-    box-shadow: var(--focus-ring);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
 }
 
 .btn-primary {
-    background: var(--color-primary);
-    color: var(--color-btn-primary-text);
-    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .btn-primary:hover {
-    background: var(--color-primary-hover);
-    box-shadow: var(--shadow-md);
+    background: rgba(255, 255, 255, 0.28);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .btn-secondary {
-    background: var(--color-secondary);
-    border: 1px solid var(--color-border);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .btn-secondary:hover {
@@ -1256,7 +1266,7 @@ body {
 
 .help-text {
     font-size: var(--font-size-xs);
-    color: var(--color-text-secondary);
+    color: rgba(255, 255, 255, 0.6);
     text-align: center;
     margin: var(--space-16) 0;
     font-style: italic;
@@ -1274,9 +1284,11 @@ body {
     align-items: center;
     justify-content: center;
     padding: var(--space-32) var(--space-20);
-    border-left: 1px solid var(--color-border);
+    border-left: 1px solid rgba(255, 255, 255, 0.18);
     position: relative;
     z-index: 10;
+    backdrop-filter: blur(20px) saturate(180%);
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .controls-container {
@@ -1295,9 +1307,10 @@ body {
     width: 56px;
     height: 56px;
     border-radius: var(--radius-full);
-    background: var(--color-secondary);
-    border: 2px solid var(--color-border);
-    color: var(--color-text);
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.9);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -1312,8 +1325,8 @@ body {
 }
 
 .control-button:hover {
-    background: var(--color-secondary-hover);
-    border-color: var(--color-border);
+    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(255, 255, 255, 0.3);
     transform: scale(1.08);
 }
 
@@ -1323,19 +1336,19 @@ body {
 
 .control-button:focus-visible {
     outline: none;
-    box-shadow: var(--focus-ring);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
 }
 
 .play-pause {
     width: 72px;
     height: 72px;
-    background: linear-gradient(135deg, rgba(var(--color-primary-rgb, var(--color-teal-500-rgb)), 0.4) 0%, rgba(var(--color-primary-rgb, var(--color-teal-500-rgb)), 0.4) 100%);
-    border-color: var(--color-border);
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
 }
 
 .play-pause:hover {
-    background: linear-gradient(135deg, rgba(var(--color-primary-rgb, var(--color-teal-500-rgb)), 0.5) 0%, rgba(var(--color-primary-rgb, var(--color-teal-500-rgb)), 0.5) 100%);
-    box-shadow: var(--shadow-md);
+    background: rgba(255, 255, 255, 0.28);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .play-pause svg {
@@ -1360,13 +1373,13 @@ body {
     font-weight: var(--font-weight-semibold);
     text-transform: uppercase;
     letter-spacing: 0.8px;
-    color: var(--color-text-secondary);
+    color: rgba(255, 255, 255, 0.7);
 }
 
 .control-slider {
     width: 100%;
     height: 4px;
-    background: var(--color-secondary);
+    background: rgba(255, 255, 255, 0.2);
     border-radius: 2px;
     outline: none;
     -webkit-appearance: none;
@@ -1379,32 +1392,32 @@ body {
     appearance: none;
     width: 14px;
     height: 14px;
-    background: var(--color-surface);
+    background: rgba(255, 255, 255, 0.9);
     border-radius: var(--radius-full);
     cursor: pointer;
     transition: all var(--transition);
-    box-shadow: var(--shadow-sm);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .control-slider::-webkit-slider-thumb:hover {
     transform: scale(1.3);
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .control-slider::-moz-range-thumb {
     width: 14px;
     height: 14px;
-    background: var(--color-surface);
+    background: rgba(255, 255, 255, 0.9);
     border-radius: var(--radius-full);
     cursor: pointer;
     border: none;
     transition: all var(--transition);
-    box-shadow: var(--shadow-sm);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .control-slider::-moz-range-thumb:hover {
     transform: scale(1.3);
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .control-slider:hover {
@@ -1413,7 +1426,7 @@ body {
 
 .interval-display {
     font-size: var(--font-size-xs);
-    color: var(--color-text-secondary);
+    color: rgba(255, 255, 255, 0.7);
     font-weight: var(--font-weight-semibold);
 }
 
@@ -1549,30 +1562,32 @@ body {
     font-weight: var(--font-weight-medium);
     max-width: 300px;
     animation: slideInRight 0.3s ease-out;
-    box-shadow: var(--shadow-lg);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     display: flex;
     gap: var(--space-10);
     align-items: center;
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .toast.success {
-    background: var(--color-success);
-    color: var(--color-surface);
+    background: rgba(34, 197, 94, 0.85);
+    color: rgba(255, 255, 255, 0.95);
 }
 
 .toast.error {
-    background: var(--color-error);
-    color: var(--color-surface);
+    background: rgba(239, 68, 68, 0.85);
+    color: rgba(255, 255, 255, 0.95);
 }
 
 .toast.info {
-    background: var(--color-info);
-    color: var(--color-surface);
+    background: rgba(59, 130, 246, 0.85);
+    color: rgba(255, 255, 255, 0.95);
 }
 
 .toast.warning {
-    background: var(--color-warning);
-    color: var(--color-surface);
+    background: rgba(245, 158, 11, 0.85);
+    color: rgba(255, 255, 255, 0.95);
 }
 
 .toast-close {
