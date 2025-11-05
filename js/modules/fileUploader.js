@@ -208,7 +208,11 @@ class LocalImageUploader {
         urls.forEach(url => {
             const thumb = document.createElement('div');
             thumb.className = 'image-thumb';
-            thumb.innerHTML = `<img src="${url}" alt="Preview" loading="lazy">`;
+            const img = document.createElement('img');
+            img.src = url;
+            img.alt = 'Preview';
+            img.loading = 'lazy';
+            thumb.appendChild(img);
             previewContainer.appendChild(thumb);
         });
     }
