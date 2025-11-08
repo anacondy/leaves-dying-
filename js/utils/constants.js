@@ -3,13 +3,12 @@
 // ============================================
 
 const CONFIG = {
-    // Default slideshow images
+    // Default slideshow images - Using local images
     DEFAULT_IMAGES: [
-        'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80',
-        'https://images.unsplash.com/photo-1489749798305-4fea3ba63d60?w=1920&q=80',
-        'https://images.unsplash.com/photo-1511379938547-c1f69b13d835?w=1920&q=80',
-        'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=1920&q=80',
-        'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920&q=80'
+        '5dd84a18932fb39a83c4c045dd78268d.jpg',
+        '7578c6938688c6b3d2d236650c0ac0e8.jpg',
+        'c7cbc9a20c27ec04bb0427e10901a7d2.jpg',
+        'e26844ce7a4f9626f64224ef83efdd51.jpg'
     ],
 
     // YouTube API

@@ -12,7 +12,8 @@ class MusicVisualApp {
             uploader: null,
             ui: null,
             notifications: null,
-            pinterest: null
+            pinterest: null,
+            keyboard: null
         };
         this.state = {
             isReady: false,
@@ -62,28 +63,9 @@ class MusicVisualApp {
             );
             this.components.scroller.init();
 
-            // Initialize file uploader
-            this.components.uploader = new LocalImageUploader((images) => {
-                this._handleUploadedImages(images);
-            });
-            this.components.uploader.init();
-
-            // Setup uploader callbacks
-            this.components.uploader.on('onSuccess', (data) => {
-                this.components.notifications.success(
-                    `✅ Loaded ${data.count} images successfully!`
-                );
-            });
-
-            this.components.uploader.on('onError', (error) => {
-                this.components.notifications.error(`❌ Upload error: ${error.message}`);
-            });
-
-            // Initialize Pinterest API
-            this.components.pinterest = new PinterestAPI('');
-            this.components.pinterest.on('onError', (error) => {
-                this.components.notifications.error(`Pinterest API Error: ${error.message}`);
-            });
+            // Initialize keyboard handler
+            this.components.keyboard = new KeyboardHandler();
+            this.components.keyboard.init(this.components.scroller, this.components.slideshow);
 
             // Initialize UI controller
             this.components.ui = new UIController(
@@ -94,9 +76,8 @@ class MusicVisualApp {
             );
             this.components.ui.init();
 
-            // Setup YouTube and Pinterest tab events
-            this._setupYouTubeTab();
-            this._setupPinterestTab();
+            // Setup editable text functionality
+            this._setupEditableText();
 
             // Preload images
             await this.components.slideshow.preload();
@@ -136,6 +117,28 @@ class MusicVisualApp {
             this.components.slideshow.start();
             this.components.scroller.resume();
         }
+        
+        // Update play/pause button icon
+        this._updatePlayPauseButton(isPlaying);
+    }
+
+    /**
+     * Update play/pause button icon
+     * @private
+     */
+    _updatePlayPauseButton(isPlaying) {
+        const playIcon = document.querySelector('.play-icon');
+        const pauseIcon = document.querySelector('.pause-icon');
+        
+        if (playIcon && pauseIcon) {
+            if (isPlaying) {
+                playIcon.style.display = 'none';
+                pauseIcon.style.display = 'block';
+            } else {
+                playIcon.style.display = 'block';
+                pauseIcon.style.display = 'none';
+            }
+        }
     }
 
     /**
@@ -150,137 +153,82 @@ class MusicVisualApp {
     }
 
     /**
-     * Handle uploaded images
+     * Setup editable text functionality
      * @private
      */
-    _handleUploadedImages(images) {
-        try {
-            this.components.slideshow.updateImages(images, true);
-            this.components.notifications.success('✅ Slideshow updated with your images!');
-        } catch (error) {
-            this.components.notifications.error(`Error updating slideshow: ${error.message}`);
-        }
-    }
-
-    /**
-     * Setup YouTube tab
-     * @private
-     */
-    _setupYouTubeTab() {
-        const playlistInput = document.getElementById('playlist-input');
-        const loadPlaylistBtn = document.getElementById('load-playlist-btn');
-
-        if (loadPlaylistBtn) {
-            loadPlaylistBtn.addEventListener('click', async () => {
-                const playlistId = playlistInput.value.trim();
-                if (!playlistId) {
-                    this.components.notifications.warning('Please enter a playlist ID');
-                    return;
-                }
-
-                try {
-                    this.components.notifications.info('Loading playlist...');
-                    this.components.player.loadPlaylist(playlistId);
-                    this.state.currentPlaylist = playlistId;
-                    this.components.notifications.success('✅ Playlist loaded!');
-                } catch (error) {
-                    this.components.notifications.error(`Error loading playlist: ${error.message}`);
+    _setupEditableText() {
+        // Setup title editing
+        const appTitle = document.getElementById('app-title');
+        const editTitleBtn = document.getElementById('edit-title-btn');
+        
+        if (appTitle && editTitleBtn) {
+            editTitleBtn.addEventListener('click', () => {
+                const isEditing = appTitle.getAttribute('contenteditable') === 'true';
+                if (isEditing) {
+                    appTitle.setAttribute('contenteditable', 'false');
+                    editTitleBtn.style.opacity = '0.7';
+                    this.components.notifications.success('Title saved!');
+                    // Save to localStorage
+                    localStorage.setItem('appTitle', appTitle.textContent);
+                } else {
+                    appTitle.setAttribute('contenteditable', 'true');
+                    appTitle.focus();
+                    editTitleBtn.style.opacity = '1';
                 }
             });
+            
+            // Load saved title
+            const savedTitle = localStorage.getItem('appTitle');
+            if (savedTitle) {
+                appTitle.textContent = savedTitle;
+            }
         }
-
-        // Set default playlist
-        if (playlistInput && this.config.YOUTUBE.DEFAULT_PLAYLIST) {
-            playlistInput.value = this.config.YOUTUBE.DEFAULT_PLAYLIST;
-        }
-    }
-
-    /**
-     * Setup Pinterest tab
-     * @private
-     */
-    _setupPinterestTab() {
-        const pinterestTokenInput = document.getElementById('pinterest-token');
-        const boardIdInput = document.getElementById('board-input');
-        const loadPinterestBtn = document.getElementById('load-pinterest-btn');
-        const searchBoardsBtn = document.getElementById('search-boards-btn');
-        const boardsList = document.getElementById('boards-list');
-
-        if (loadPinterestBtn) {
-            loadPinterestBtn.addEventListener('click', async () => {
-                const token = pinterestTokenInput.value.trim();
-                const boardId = boardIdInput.value.trim();
-
-                if (!token) {
-                    this.components.notifications.warning('Please enter Pinterest access token');
-                    return;
-                }
-
-                if (!boardId) {
-                    this.components.notifications.warning('Please enter a board ID');
-                    return;
-                }
-
-                try {
-                    this.components.notifications.info('Loading Pinterest images...');
-                    this.components.pinterest.setToken(token);
-                    const pins = await this.components.pinterest.getBoardPins(boardId);
-
-                    if (pins.length === 0) {
-                        this.components.notifications.warning('No images found in this board');
-                        return;
+        
+        // Setup text scroll editing
+        const textScroll = document.getElementById('text-scroll');
+        const editTextBtn = document.getElementById('edit-text-btn');
+        
+        if (textScroll && editTextBtn) {
+            let textItemsCache = null;
+            
+            editTextBtn.addEventListener('click', () => {
+                const isEditing = textScroll.getAttribute('contenteditable') === 'true';
+                if (isEditing) {
+                    textScroll.setAttribute('contenteditable', 'false');
+                    editTextBtn.style.opacity = '0.7';
+                    
+                    // Update text items using cached elements
+                    textItemsCache = textScroll.querySelectorAll('.text-item');
+                    const items = Array.from(textItemsCache)
+                        .map(item => item.textContent.trim())
+                        .filter(text => text.length > 0);
+                    
+                    if (items.length > 0) {
+                        this.components.scroller.updateItems(items);
+                        this.components.notifications.success('Text items saved!');
+                        // Save to localStorage
+                        localStorage.setItem('textItems', JSON.stringify(items));
                     }
-
-                    const imageUrls = pins.map(pin => pin.imageUrl).filter(url => url);
-                    this.components.slideshow.updateImages(imageUrls, true);
-                    this.components.notifications.success(`✅ Loaded ${imageUrls.length} images from Pinterest!`);
-                } catch (error) {
-                    this.components.notifications.error(`Pinterest error: ${error.message}`);
+                    textItemsCache = null; // Clear cache after use
+                } else {
+                    textScroll.setAttribute('contenteditable', 'true');
+                    editTextBtn.style.opacity = '1';
+                    this.components.notifications.info('Edit mode enabled - modify text items');
                 }
             });
-        }
-
-        if (searchBoardsBtn) {
-            searchBoardsBtn.addEventListener('click', async () => {
-                const token = pinterestTokenInput.value.trim();
-
-                if (!token) {
-                    this.components.notifications.warning('Please enter Pinterest access token first');
-                    return;
-                }
-
+            
+            // Load saved text items
+            const savedItems = localStorage.getItem('textItems');
+            if (savedItems) {
                 try {
-                    this.components.notifications.info('Fetching your boards...');
-                    this.components.pinterest.setToken(token);
-                    const boards = await this.components.pinterest.getUserBoards();
-
-                    if (!boardsList) return;
-                    boardsList.innerHTML = '';
-
-                    if (boards.length === 0) {
-                        boardsList.innerHTML = '<p class="help-text">No boards found</p>';
-                        return;
+                    const items = JSON.parse(savedItems);
+                    if (Array.isArray(items) && items.length > 0) {
+                        this.components.scroller.updateItems(items);
                     }
-
-                    boards.forEach(board => {
-                        const boardItem = document.createElement('div');
-                        boardItem.className = 'board-item';
-                        boardItem.innerHTML = `
-                            <strong>${sanitizeHTML(board.name)}</strong>
-                            <small>${sanitizeHTML(board.id)}</small>
-                        `;
-                        boardItem.addEventListener('click', () => {
-                            boardIdInput.value = board.id;
-                            this.components.notifications.success(`✅ Selected board: ${board.name}`);
-                        });
-                        boardsList.appendChild(boardItem);
-                    });
-
-                    this.components.notifications.success(`✅ Found ${boards.length} boards!`);
-                } catch (error) {
-                    this.components.notifications.error(`Error fetching boards: ${error.message}`);
+                } catch (e) {
+                    console.warn('Failed to load saved text items:', e);
                 }
-            });
+            }
         }
     }
 
